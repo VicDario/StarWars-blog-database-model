@@ -8,26 +8,46 @@ from eralchemy import render_er
 
 Base = declarative_base()
 
-class Person(Base):
-    __tablename__ = 'person'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
+class User(Base):
+    __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
+    username = Column(String(100))
+    email = Column(String(100), nullable=False)
+    password = Column(String(100), nullable=False)
 
-class Address(Base):
-    __tablename__ = 'address'
-    # Here we define columns for the table address.
-    # Notice that each column is also a normal Python instance attribute.
+class Favorites(Base):
+    __tablename__ = 'Favorite'
     id = Column(Integer, primary_key=True)
-    street_name = Column(String(250))
-    street_number = Column(String(250))
-    post_code = Column(String(250), nullable=False)
-    person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
+    id_user = Column(Integer, ForeignKey('user.id'))
+    name = Column(String(100), nullable=False)
+    user = relationship(User)
 
-    def to_dict(self):
-        return {}
+class Planet(Base):
+    __tablename__ = 'planet'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(80), nullable=False)
+    diameter = Column(Integer)
+    rotation_period = Column(Integer)
+    orbital_period = Column(Integer)
+    population = Column(Integer)
+    climate = Column(String(40))
+    terrain = Column(String(40))
+    gravity = Column(String(20))
+    surface_water = Column(Integer)
+
+class Characters(Base):
+    __tablename__ = 'character'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(80), nullable=False)
+    gender = Column(String(6))
+    hair_color = Column(String(15))
+    eye_color = Column(String(15))
+    mass = Column(String(4))
+    height = Column(String(4))
+    home_world_id = Column(Integer, ForeignKey('planet.id'))
+    planet = relationship(Planet)
+
 
 ## Draw from SQLAlchemy base
 render_er(Base, 'diagram.png')
